@@ -16,7 +16,7 @@ public class DeletePoliticianWindow extends JOptionPane {
 		txtId = new JTextField();
 
 		JPanel panel = new JPanel(new GridLayout(4, 2, 5, 5));
-		panel.add(new JLabel("Número del que desea eliminar:"));
+		panel.add(new JLabel("Número de cédula que desea eliminar:"));
 		panel.add(txtId);
 
 		op = showConfirmDialog(null, panel, "Eliminar rata", OK_CANCEL_OPTION);

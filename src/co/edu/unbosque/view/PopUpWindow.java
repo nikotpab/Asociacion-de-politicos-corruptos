@@ -30,6 +30,10 @@ public class PopUpWindow {
 		message.showMessageDialog(null, "No se pudo eliminar corrupto");
 	}
 
+	public static void generated(int n) {
+		message.showMessageDialog(null, "Se han generado " + n + " registros");
+	}
+
 	public static void pdfCreated() {
 		message.showMessageDialog(null, "PDF creado exitosamente en la carpeta estadisticas/");
 	}

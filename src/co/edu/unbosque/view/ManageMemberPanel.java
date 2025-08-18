@@ -34,7 +34,7 @@ public class ManageMemberPanel extends JPanel {
 		title.setFont(new Font("Consolas", Font.BOLD, 46));
 		title.setVerticalAlignment(JLabel.CENTER);
 
-		String[] col = { "Nombre", "ID", "Dinero robado", "Fecha de nacimiento" };
+		String[] col = { "Nombre", "Cédula", "Dinero robado", "Fecha de nacimiento" };
 		Object[][] data = {};
 		DefaultTableModel model = new DefaultTableModel(data, col) {
 			@Override
