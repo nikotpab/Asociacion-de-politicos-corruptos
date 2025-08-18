@@ -1,0 +1,10 @@
+/**
+ * 
+ */
+/**
+ * 
+ */
+module T1C1CA {
+	requires java.desktop;
+	requires jcalendar;
+}
