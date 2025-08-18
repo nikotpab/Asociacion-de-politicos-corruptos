@@ -3,6 +3,7 @@ package co.edu.unbosque.controller;
 import java.util.Date;
 
 import co.edu.unbosque.model.ModelFacade;
+import co.edu.unbosque.model.Politician;
 import co.edu.unbosque.model.PoliticianDTO;
 import co.edu.unbosque.view.PopUpWindow;
 
@@ -32,6 +33,10 @@ public class ControllerService {
 		}
 		puw.faileDelete();
 		return false;
+	}
+
+	public Politician[] convertArrayListToMat(Politician[] p) {
+		return mf.getPdao().getListCriminals().toArray(p);
 	}
 
 	public void print() {

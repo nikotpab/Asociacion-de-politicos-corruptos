@@ -36,7 +36,12 @@ public class ManageMemberPanel extends JPanel {
 
 		String[] col = { "Nombre", "ID", "Dinero robado", "Fecha de nacimiento" };
 		Object[][] data = {};
-		DefaultTableModel model = new DefaultTableModel(data, col);
+		DefaultTableModel model = new DefaultTableModel(data, col) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 
 		table = new JTable(model);
 		table.setFont(new Font("Consolas", Font.PLAIN, 14));
