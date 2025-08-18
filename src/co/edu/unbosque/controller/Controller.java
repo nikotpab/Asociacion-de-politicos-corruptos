@@ -3,13 +3,26 @@ package co.edu.unbosque.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import co.edu.unbosque.model.Politician;
+import co.edu.unbosque.model.PoliticianDTO;
+import co.edu.unbosque.util.sort.BubbleSort;
+import co.edu.unbosque.util.sort.InsertionSort;
+import co.edu.unbosque.util.sort.MergeSort;
+import co.edu.unbosque.util.sort.QuickSort;
+import co.edu.unbosque.util.sort.SelectionSort;
 import co.edu.unbosque.view.DeletePoliticianWindow;
 import co.edu.unbosque.view.NewPoliticianWindow;
+import co.edu.unbosque.view.PoliticianSortWindow;
 import co.edu.unbosque.view.ViewFacade;
 
 public class Controller implements ActionListener {
@@ -65,6 +78,8 @@ public class Controller implements ActionListener {
 			addPolitician();
 		} else if (e.getSource() == vf.getWin().getMmp().getBtnDelete()) {
 			deletePolitician();
+		} else if (e.getSource() == vf.getWin().getMmp().getBtnSort()) {
+			sortPolitician();
 
 		}
 
@@ -94,6 +109,29 @@ public class Controller implements ActionListener {
 		}
 	}
 
+	public void sortPolitician() {
+		PoliticianSortWindow popup = new PoliticianSortWindow();
+		Politician[] p = {};
+		if (popup.ok()) {
+			orderTable();
+			if ("Bubble Sort".equals(popup.getSortAlgList().getSelectedItem())) {
+				BubbleSort.bubbleSort(cs.convertArrayListToMat(p));
+			}
+			if ("Insertion Sort".equals(popup.getSortAlgList().getSelectedItem())) {
+				InsertionSort.insertionSort(cs.convertArrayListToMat(p));
+			}
+			if ("Merge Sort".equals(popup.getSortAlgList().getSelectedItem())) {
+				MergeSort.mergeSort(cs.convertArrayListToMat(p));
+			}
+			if ("Quick Sort".equals(popup.getSortAlgList().getSelectedItem())) {
+				QuickSort.quickSort(cs.convertArrayListToMat(p));
+			}
+			if ("Selection Sort".equals(popup.getSortAlgList().getSelectedItem())) {
+				SelectionSort.selectionSort(cs.convertArrayListToMat(p));
+			}
+		}
+	}
+
 	public void updateTable() {
 		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		String[] col = { "Nombre", "ID", "Dinero robado", "Fecha de nacimiento" };
@@ -104,7 +142,37 @@ public class Controller implements ActionListener {
 			data[i][2] = String.valueOf(cs.getMf().getPdao().getAll().get(i).getMoneyToRob());
 			data[i][3] = df.format(cs.getMf().getPdao().getAll().get(i).getBirthDate());
 		}
-		vf.getWin().getMmp().getTable().setModel(new DefaultTableModel(data, col));
+		DefaultTableModel model = new DefaultTableModel(data, col) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		vf.getWin().getMmp().getTable().setModel(model);
+		vf.getWin().getMmp().revalidate();
+		vf.getWin().getMmp().repaint();
+	}
+
+	public void orderTable() {
+		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		String[] col = { "Nombre", "ID", "Dinero robado", "Fecha de nacimiento" };
+		List<PoliticianDTO> politicians = new ArrayList<>(cs.getMf().getPdao().getAll());
+		Collections.sort(politicians);
+		Object[][] data = new Object[politicians.size()][4];
+		for (int i = 0; i < politicians.size(); i++) {
+			PoliticianDTO p = politicians.get(i);
+			data[i][0] = p.getName();
+			data[i][1] = p.getId();
+			data[i][2] = p.getMoneyToRob();
+			data[i][3] = df.format(p.getBirthDate());
+		}
+		DefaultTableModel model = new DefaultTableModel(data, col) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		vf.getWin().getMmp().getTable().setModel(model);
 		vf.getWin().getMmp().revalidate();
 		vf.getWin().getMmp().repaint();
 	}

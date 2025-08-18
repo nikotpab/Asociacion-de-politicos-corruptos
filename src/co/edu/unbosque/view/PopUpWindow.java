@@ -8,7 +8,7 @@ import co.edu.unbosque.model.persistence.FileHandler;
 
 public class PopUpWindow {
 
-	private JOptionPane message;
+	private static JOptionPane message;
 
 	public PopUpWindow() {
 
@@ -28,6 +28,14 @@ public class PopUpWindow {
 
 	public void faileDelete() {
 		message.showMessageDialog(null, "No se pudo eliminar corrupto");
+	}
+
+	public static void pdfCreated() {
+		message.showMessageDialog(null, "PDF creado exitosamente en la carpeta estadisticas/");
+	}
+
+	public static void pdfFailed() {
+		message.showMessageDialog(null, "No se pudo crear PDF");
 	}
 
 }

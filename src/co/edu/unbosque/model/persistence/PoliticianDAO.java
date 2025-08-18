@@ -86,4 +86,12 @@ public class PoliticianDAO implements CRUDOperation<PoliticianDTO, Politician> {
 		}
 	}
 
+	public ArrayList<Politician> getListCriminals() {
+		return listCriminals;
+	}
+
+	public void setListCriminals(ArrayList<Politician> listCriminals) {
+		this.listCriminals = listCriminals;
+	}
+
 }

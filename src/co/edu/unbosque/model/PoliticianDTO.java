@@ -3,11 +3,11 @@ package co.edu.unbosque.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class PoliticianDTO implements Serializable{
+public class PoliticianDTO implements Serializable, Comparable<PoliticianDTO> {
 
 	private static final long serialVersionUID = 1L;
 	private int id;
-	private long moneyToRob;
+	public long moneyToRob;
 	private Date birthDate;
 	private String name;
 
@@ -59,6 +59,10 @@ public class PoliticianDTO implements Serializable{
 	public String toString() {
 		return "\nID: " + id + "\nDinero dispuesto a robar: " + moneyToRob + "\nFecha de nacimiento: " + birthDate
 				+ "\nNombre:" + name;
+	}
+
+	public int compareTo(PoliticianDTO other) {
+		return Long.compare(this.moneyToRob, other.moneyToRob);
 	}
 
 }
