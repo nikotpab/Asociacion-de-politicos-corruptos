@@ -28,7 +28,7 @@ public class BubbleSort {
 		intercambio = 0;
 		tiempo = 0;
 		long start = System.nanoTime();
-		sort(politicos, politicos.length);
+		sortByMoneyToRob(politicos, politicos.length);
 		long end = System.nanoTime();
 		tiempo = end - start;
 		try {
@@ -69,7 +69,35 @@ public class BubbleSort {
 		}
 	}
 
-	private static void sort(Politician arr[], int n) {
+	public static void matrixBubbleSort(Politician[][] matrix) {
+		comparacion = 0;
+		intercambio = 0;
+		tiempo = 0;
+		long start = System.nanoTime();
+		for (int i = 0; i < matrix.length; i++) {
+			Politician[] fila = matrix[i];
+			sortByMoneyToRob(fila, fila.length);
+		}
+		for (int j = 0; j < matrix[0].length; j++) {
+			Politician[] columna = new Politician[matrix.length];
+			for (int i = 0; i < matrix.length; i++) {
+				columna[i] = matrix[i][j];
+			}
+			sortByBirthDate(columna, columna.length);
+			for (int i = 0; i < matrix.length; i++) {
+				matrix[i][j] = columna[i];
+			}
+		}
+		long end = System.nanoTime();
+		tiempo = end - start;
+		System.out.println("MatrixBubbleSort");
+		System.out.println("Tamaño Matriz " + matrix.length + "x" + matrix[0].length);
+		System.out.println("Comparaciones: " + comparacion);
+		System.out.println("Intercambios: " + intercambio);
+		System.out.println("Tiempo (ns): " + tiempo);
+	}
+
+	private static void sortByMoneyToRob(Politician arr[], int n) {
 		boolean swapped;
 		for (int i = 0; i < n - 1; i++) {
 			swapped = false;
@@ -79,6 +107,25 @@ public class BubbleSort {
 					Politician temp = arr[j];
 					arr[j] = arr[j + 1];
 					arr[j + 1] = temp;
+					intercambio++;
+					swapped = true;
+				}
+			}
+			if (!swapped)
+				break;
+		}
+	}
+
+	private static void sortByBirthDate(Politician[] columna, int n) {
+		boolean swapped;
+		for (int i = 0; i < n - 1; i++) {
+			swapped = false;
+			for (int j = 0; j < n - i - 1; j++) {
+				comparacion++;
+				if (columna[j].getBirthDate().before(columna[j + 1].getBirthDate())) {
+					Politician temp = columna[j];
+					columna[j] = columna[j + 1];
+					columna[j + 1] = temp;
 					intercambio++;
 					swapped = true;
 				}

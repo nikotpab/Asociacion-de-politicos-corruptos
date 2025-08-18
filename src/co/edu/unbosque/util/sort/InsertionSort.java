@@ -28,7 +28,7 @@ public class InsertionSort {
 		intercambio = 0;
 		tiempo = 0;
 		long start = System.nanoTime();
-		sort(politicos);
+		sortByMoneyToRob(politicos);
 		long end = System.nanoTime();
 		tiempo = end - start;
 		try {
@@ -69,12 +69,39 @@ public class InsertionSort {
 		}
 	}
 
-	private static void sort(Politician arr[]) {
+	public static void matrixInsertionSort(Politician[][] matrix) {
+		comparacion = 0;
+		intercambio = 0;
+		tiempo = 0;
+		long start = System.nanoTime();
+		for (int i = 0; i < matrix.length; i++) {
+			Politician[] fila = matrix[i];
+			sortByMoneyToRob(fila);
+		}
+		for (int j = 0; j < matrix[0].length; j++) {
+			Politician[] columna = new Politician[matrix.length];
+			for (int i = 0; i < matrix.length; i++) {
+				columna[i] = matrix[i][j];
+			}
+			sortByBirthDate(columna);
+			for (int i = 0; i < matrix.length; i++) {
+				matrix[i][j] = columna[i];
+			}
+		}
+		long end = System.nanoTime();
+		tiempo = end - start;
+		System.out.println("MatrixInsertionSort");
+		System.out.println("Tamaño Matriz " + matrix.length + "x" + matrix[0].length);
+		System.out.println("Comparaciones: " + comparacion);
+		System.out.println("Intercambios: " + intercambio);
+		System.out.println("Tiempo (ns): " + tiempo);
+	}
+
+	private static void sortByMoneyToRob(Politician arr[]) {
 		int n = arr.length;
 		for (int i = 1; i < n; ++i) {
 			Politician key = arr[i];
 			int j = i - 1;
-
 			while (j >= 0) {
 				comparacion++;
 				if (arr[j].getMoneyToRob() > key.getMoneyToRob()) {
@@ -88,4 +115,24 @@ public class InsertionSort {
 			intercambio++;
 		}
 	}
+
+	private static void sortByBirthDate(Politician arr[]) {
+		int n = arr.length;
+		for (int i = 1; i < n; ++i) {
+			Politician key = arr[i];
+			int j = i - 1;
+			while (j >= 0) {
+				comparacion++;
+				if (arr[j].getBirthDate().before(key.getBirthDate())) {
+					arr[j + 1] = arr[j];
+					j = j - 1;
+				} else {
+					break;
+				}
+			}
+			arr[j + 1] = key;
+			intercambio++;
+		}
+	}
+
 }

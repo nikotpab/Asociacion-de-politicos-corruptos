@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Date;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -28,7 +29,7 @@ public class QuickSort {
 		intercambio = 0;
 		tiempo = 0;
 		long start = System.nanoTime();
-		sort(politicos, 0, politicos.length - 1);
+		sortByMoneyToRob(politicos, 0, politicos.length - 1);
 		long end = System.nanoTime();
 		tiempo = end - start;
 		try {
@@ -69,20 +70,46 @@ public class QuickSort {
 		}
 	}
 
-	private static void sort(Politician[] arr, int low, int high) {
-		if (low < high) {
-			int pi = partition(arr, low, high);
+	public static void matrixQuickSort(Politician[][] matrix) {
+		comparacion = 0;
+		intercambio = 0;
+		tiempo = 0;
+		long start = System.nanoTime();
+		for (int i = 0; i < matrix.length; i++) {
+			Politician[] fila = matrix[i];
+			sortByMoneyToRob(fila, 0, fila.length - 1);
+		}
+		for (int j = 0; j < matrix[0].length; j++) {
+			Politician[] columna = new Politician[matrix.length];
+			for (int i = 0; i < matrix.length; i++) {
+				columna[i] = matrix[i][j];
+			}
+			sortByBirthDate(columna, 0, columna.length - 1);
+			for (int i = 0; i < matrix.length; i++) {
+				matrix[i][j] = columna[i];
+			}
+		}
+		long end = System.nanoTime();
+		tiempo = end - start;
+		System.out.println("MatrixQuickSort");
+		System.out.println("Tamaño Matriz " + matrix.length + "x" + matrix[0].length);
+		System.out.println("Comparaciones: " + comparacion);
+		System.out.println("Intercambios: " + intercambio);
+		System.out.println("Tiempo (ns): " + tiempo);
+	}
 
-			sort(arr, low, pi - 1);
-			sort(arr, pi + 1, high);
+	private static void sortByMoneyToRob(Politician[] arr, int low, int high) {
+		if (low < high) {
+			int pi = partitionByMoneyToRob(arr, low, high);
+			sortByMoneyToRob(arr, low, pi - 1);
+			sortByMoneyToRob(arr, pi + 1, high);
 		}
 	}
 
-	private static int partition(Politician[] arr, int low, int high) {
+	private static int partitionByMoneyToRob(Politician[] arr, int low, int high) {
 		Politician pivot = arr[high];
 		long pivotValue = pivot.getMoneyToRob();
 		int i = low - 1;
-
 		for (int j = low; j <= high - 1; j++) {
 			comparacion++;
 			if (arr[j].getMoneyToRob() < pivotValue) {
@@ -90,7 +117,6 @@ public class QuickSort {
 				swap(arr, i, j);
 			}
 		}
-
 		swap(arr, i + 1, high);
 		return i + 1;
 	}
@@ -100,6 +126,29 @@ public class QuickSort {
 		arr[i] = arr[j];
 		arr[j] = temp;
 		intercambio++;
+	}
+
+	private static void sortByBirthDate(Politician[] arr, int low, int high) {
+		if (low < high) {
+			int pi = partitionByBirthDate(arr, low, high);
+			sortByBirthDate(arr, low, pi - 1);
+			sortByBirthDate(arr, pi + 1, high);
+		}
+	}
+
+	private static int partitionByBirthDate(Politician[] arr, int low, int high) {
+		Politician pivot = arr[high];
+		Date pivotDate = pivot.getBirthDate();
+		int i = low - 1;
+		for (int j = low; j <= high - 1; j++) {
+			comparacion++;
+			if (arr[j].getBirthDate().after(pivotDate)) {
+				i++;
+				swap(arr, i, j);
+			}
+		}
+		swap(arr, i + 1, high);
+		return i + 1;
 	}
 
 }

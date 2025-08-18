@@ -28,7 +28,7 @@ public class SelectionSort {
 		intercambio = 0;
 		tiempo = 0;
 		long start = System.nanoTime();
-		sort(politicos);
+		sortByMoneyToRob(politicos);
 		long end = System.nanoTime();
 		tiempo = end - start;
 		try {
@@ -69,7 +69,35 @@ public class SelectionSort {
 		}
 	}
 
-	private static void sort(Politician[] arr) {
+	public static void matrixSelectionSort(Politician[][] matrix) {
+		comparacion = 0;
+		intercambio = 0;
+		tiempo = 0;
+		long start = System.nanoTime();
+		for (int i = 0; i < matrix.length; i++) {
+			Politician[] fila = matrix[i];
+			sortByMoneyToRob(fila);
+		}
+		for (int j = 0; j < matrix[0].length; j++) {
+			Politician[] columna = new Politician[matrix.length];
+			for (int i = 0; i < matrix.length; i++) {
+				columna[i] = matrix[i][j];
+			}
+			sortByBirthDate(columna);
+			for (int i = 0; i < matrix.length; i++) {
+				matrix[i][j] = columna[i];
+			}
+		}
+		long end = System.nanoTime();
+		tiempo = end - start;
+		System.out.println("MatrixSelectionSort");
+		System.out.println("Tamaño Matriz " + matrix.length + "x" + matrix[0].length);
+		System.out.println("Comparaciones: " + comparacion);
+		System.out.println("Intercambios: " + intercambio);
+		System.out.println("Tiempo (ns): " + tiempo);
+	}
+
+	private static void sortByMoneyToRob(Politician[] arr) {
 		int n = arr.length;
 		for (int i = 0; i < n - 1; i++) {
 			int min_idx = i;
@@ -81,6 +109,23 @@ public class SelectionSort {
 				}
 			}
 
+			Politician temp = arr[i];
+			arr[i] = arr[min_idx];
+			arr[min_idx] = temp;
+			intercambio++;
+		}
+	}
+
+	private static void sortByBirthDate(Politician[] arr) {
+		int n = arr.length;
+		for (int i = 0; i < n - 1; i++) {
+			int min_idx = i;
+			for (int j = i + 1; j < n; j++) {
+				comparacion++;
+				if (arr[j].getBirthDate().after(arr[min_idx].getBirthDate())) {
+					min_idx = j;
+				}
+			}
 			Politician temp = arr[i];
 			arr[i] = arr[min_idx];
 			arr[min_idx] = temp;
