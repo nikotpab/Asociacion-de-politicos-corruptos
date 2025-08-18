@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Random;
 
-public class PoliticoRepository {
+public class PoliticianRepository {
 
 	public static Politician[][] generarMatrixPoliticos(int k, int m) {
 		if (k * m < 10) {

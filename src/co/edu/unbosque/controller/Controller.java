@@ -23,6 +23,7 @@ import co.edu.unbosque.util.sort.SelectionSort;
 import co.edu.unbosque.view.DeletePoliticianWindow;
 import co.edu.unbosque.view.NewPoliticianWindow;
 import co.edu.unbosque.view.PoliticianSortWindow;
+import co.edu.unbosque.view.PopUpWindow;
 import co.edu.unbosque.view.ViewFacade;
 
 public class Controller implements ActionListener {
@@ -47,6 +48,9 @@ public class Controller implements ActionListener {
 		vf.getWin().getMmp().getBtnSort().addActionListener(this);
 
 		vf.getWin().getMap().getBtnBack().addActionListener(this);
+		vf.getWin().getMap().getBtnAccept().addActionListener(this);
+		vf.getWin().getMap().getBtnSort().addActionListener(this);
+		vf.getWin().getMap().getBtnSortMat().addActionListener(this);
 	}
 
 	@Override
@@ -80,9 +84,14 @@ public class Controller implements ActionListener {
 			deletePolitician();
 		} else if (e.getSource() == vf.getWin().getMmp().getBtnSort()) {
 			sortPolitician();
-
+		} else if (e.getSource() == vf.getWin().getMap().getBtnAccept()) {
+			generateData();
+			PopUpWindow.generated(generateData().length);
+		} else if (e.getSource() == vf.getWin().getMap().getBtnSort()) {
+			sortGeneratedData();
+		} else if (e.getSource() == vf.getWin().getMap().getBtnSortMat()) {
+			sortGeneratedDataMat(generateMat());
 		}
-
 	}
 
 	public void addPolitician() {
@@ -134,7 +143,7 @@ public class Controller implements ActionListener {
 
 	public void updateTable() {
 		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-		String[] col = { "Nombre", "ID", "Dinero robado", "Fecha de nacimiento" };
+		String[] col = { "Nombre", "Cédula", "Dinero robado", "Fecha de nacimiento" };
 		Object[][] data = new Object[cs.getMf().getPdao().getAll().size()][4];
 		for (int i = 0; i < cs.getMf().getPdao().getAll().size(); i++) {
 			data[i][0] = cs.getMf().getPdao().getAll().get(i).getName();
@@ -155,7 +164,7 @@ public class Controller implements ActionListener {
 
 	public void orderTable() {
 		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-		String[] col = { "Nombre", "ID", "Dinero robado", "Fecha de nacimiento" };
+		String[] col = { "Nombre", "Cédula", "Dinero robado", "Fecha de nacimiento" };
 		List<PoliticianDTO> politicians = new ArrayList<>(cs.getMf().getPdao().getAll());
 		Collections.sort(politicians);
 		Object[][] data = new Object[politicians.size()][4];
@@ -175,5 +184,57 @@ public class Controller implements ActionListener {
 		vf.getWin().getMmp().getTable().setModel(model);
 		vf.getWin().getMmp().revalidate();
 		vf.getWin().getMmp().repaint();
+	}
+
+	public Politician[] generateData() {
+		int pc = Integer.parseInt(vf.getWin().getMap().getTxtCol().getText())
+				* Integer.parseInt(vf.getWin().getMap().getTxtRow().getText());
+
+		vf.getWin().getMap().getPoliticianqty().setText("Cantidad de ratas en el auditorio: " + pc);
+
+		return cs.getMf().getPr().generarPoliticos(pc);
+
+	}
+
+	public Politician[][] generateMat() {
+
+		return cs.getMf().getPr().generarMatrixPoliticos(Integer.parseInt(vf.getWin().getMap().getTxtCol().getText()),
+				Integer.parseInt(vf.getWin().getMap().getTxtRow().getText()));
+	}
+
+	public void sortGeneratedData() {
+		if ("Bubble Sort".equals(vf.getWin().getMap().getOp().getSelectedItem())) {
+			BubbleSort.bubbleSort(generateData());
+		}
+		if ("Insertion Sort".equals(vf.getWin().getMap().getOp().getSelectedItem())) {
+			InsertionSort.insertionSort(generateData());
+		}
+		if ("Merge Sort".equals(vf.getWin().getMap().getOp().getSelectedItem())) {
+			MergeSort.mergeSort(generateData());
+		}
+		if ("Quick Sort".equals(vf.getWin().getMap().getOp().getSelectedItem())) {
+			QuickSort.quickSort(generateData());
+		}
+		if ("Selection Sort".equals(vf.getWin().getMap().getOp().getSelectedItem())) {
+			SelectionSort.selectionSort(generateData());
+		}
+	}
+
+	public void sortGeneratedDataMat(Politician[][] p) {
+		if ("Bubble Sort".equals(vf.getWin().getMap().getOp().getSelectedItem())) {
+			BubbleSort.matrixBubbleSort(p);
+		}
+		if ("Insertion Sort".equals(vf.getWin().getMap().getOp().getSelectedItem())) {
+			InsertionSort.matrixInsertionSort(p);
+		}
+		if ("Merge Sort".equals(vf.getWin().getMap().getOp().getSelectedItem())) {
+			MergeSort.matrixMergeSort(p);
+		}
+		if ("Quick Sort".equals(vf.getWin().getMap().getOp().getSelectedItem())) {
+			QuickSort.matrixQuickSort(p);
+		}
+		if ("Selection Sort".equals(vf.getWin().getMap().getOp().getSelectedItem())) {
+			SelectionSort.matrixSelectionSort(p);
+		}
 	}
 }
