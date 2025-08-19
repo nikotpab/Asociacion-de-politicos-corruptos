@@ -41,5 +41,9 @@ public class PopUpWindow {
 	public static void pdfFailed() {
 		message.showMessageDialog(null, "No se pudo crear PDF");
 	}
+	
+	public static void error() {
+		message.showMessageDialog(null, "Error");
+	}
 
 }
